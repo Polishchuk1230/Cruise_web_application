@@ -22,7 +22,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println(req.getParameter("error"));
         req.getRequestDispatcher("jsp/registration-page.jsp").forward(req, resp);
     }
 
