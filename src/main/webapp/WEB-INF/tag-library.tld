@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>my</short-name>
+    <uri>/myTags</uri>
+
+    <tag>
+        <name>order</name>
+        <tag-class>ua.com.cruises.model.tags.OrderPresentationTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>obj</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>ua.com.cruises.model.Order</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>cruise</name>
+        <tag-class>ua.com.cruises.model.tags.CruisePresentationTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>obj</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>ua.com.cruises.model.Cruise</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>boat</name>
+        <tag-class>ua.com.cruises.model.tags.BoatPresentationTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>obj</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>ua.com.cruises.model.Boat</type>
+        </attribute>
+    </tag>
+
+</taglib>
