@@ -43,13 +43,25 @@ public class PortDao implements Dao<Port> {
 
     @Override
     public boolean insert(Port port) {
-        final String QUERY = String.format("INSERT INTO ports (id, country, city) VALUES (%d, '%s', '%s')",
-                port.getId(), port.getCountry(), port.getCity());
+        final String sqlPattern = "INSERT INTO ports (id, country, city) VALUES (?, ?, ?)";
 
-        FunctionThrowsSQLExc<Statement, Optional<Object>> insert = statement ->
-                commonInsertNewRow(port, QUERY, statement);
+        FunctionThrowsSQLExc<PreparedStatement, Optional<Object>> insert = prepStatement -> {
+            prepStatement.setInt(1, port.getId());
+            prepStatement.setString(2, port.getCountry());
+            prepStatement.setString(3, port.getCity());
+            int count = prepStatement.executeUpdate();
 
-        return (boolean) provideStatementForFunction(insert).orElse(false);
+            if (count == 1) {
+                ResultSet resultSet = prepStatement.getGeneratedKeys();
+                if (port.getId() == 0 && resultSet.next()) {
+                    port.setId(resultSet.getInt(1));
+                }
+                return Optional.of(true);
+            }
+            return Optional.of(false);
+        };
+
+        return (boolean) providePrepStatementForFunction(insert, sqlPattern).orElse(false);
     }
 
     @Override

@@ -4,10 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.com.cruises.model.Pojo;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +14,7 @@ public class DaoMethods {
     private static Logger logger = LogManager.getLogger(DaoMethods.class);
 
     /*
-     * The method designed to minimize the boiler code of (1)getting Connection, (2)creating Statement and
+     * The methods below are designed to minimize the boiler code of (1)getting Connection, (2)creating Statement and
      * (3)using try/catch in dao-classes
      * */
     static Optional<Object> provideStatementForFunction(FunctionThrowsSQLExc<Statement, Optional<Object>> function) {
@@ -25,6 +22,19 @@ public class DaoMethods {
              Statement statement = connection.createStatement())
         {
             return function.apply(statement);
+        }
+        catch (SQLException e) {
+            logger.debug(e);
+            return Optional.empty();
+        }
+    }
+
+    // This one provides PreparedStatement
+    static Optional<Object> providePrepStatementForFunction(FunctionThrowsSQLExc<PreparedStatement, Optional<Object>> function, String sql) {
+        try (Connection connection = ConnectionPool.getConnection();
+             PreparedStatement prepStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
+        {
+            return function.apply(prepStatement);
         }
         catch (SQLException e) {
             logger.debug(e);
